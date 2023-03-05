@@ -1,18 +1,80 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { MsalGuardConfiguration, MsalInterceptor, MsalInterceptorConfiguration, MsalModule, MsalRedirectComponent, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG } from '@azure/msal-angular';
+import { InteractionType, IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PublicPageComponent } from './public-page/public-page.component';
+import { RestrictedPageComponent } from './restricted-page/restricted-page.component';
+import { loginRequest, msalConfig } from './auth-config';
+
+// export function MSALInstanceFactory(): IPublicClientApplication {
+//   return new PublicClientApplication({
+//     auth: {
+//       clientId: 'b80fffa9-1c1e-4edb-bc03-8254602dadcb',
+//       redirectUri: 'http://localhost:4200',
+//       authority: "https://login.microsoftonline.com/f19dc503-bcf3-4611-9678-391db76e919b",
+//       // "Authority": "https://login.microsoftonline.com/{value of client id above}/tenadId",
+//       postLogoutRedirectUri: "http://localhost:4200/public-page"
+//     }
+//   });
+// }
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication(msalConfig);
+}
+
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<string, Array<string>>();
+  protectedResourceMap.set('https://graph.microsoft.com/v1.0/me', ['user.read', 'mail.read']);
+  // protectedResourceMap.set('http://localhost:8080/hello', ['api://d16e1a06-3be2-4ae1-8bd4-718c19cecac3/hello']);
+
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap
+  };
+}
+
+export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+  return {
+      interactionType: InteractionType.Redirect,
+      authRequest: loginRequest
+  };
+}
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PublicPageComponent,
+    RestrictedPageComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MsalModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: MsalInterceptor,
+    multi: true
+  },
+  {
+    provide: MSAL_INSTANCE,
+    useFactory: MSALInstanceFactory
+  },
+  {
+    provide: MSAL_GUARD_CONFIG,
+    useFactory: MSALGuardConfigFactory
+  },
+  {
+    provide: MSAL_INTERCEPTOR_CONFIG,
+    useFactory: MSALInterceptorConfigFactory
+  },
+  MsalService],
+  bootstrap: [AppComponent, MsalRedirectComponent]
 })
 export class AppModule { }
