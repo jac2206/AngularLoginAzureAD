@@ -15,25 +15,13 @@
   * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/configuration.md
   */
  export const msalConfig: Configuration = {
-    //  auth: {
-    //      clientId: 'Enter_the_Application_Id_Here', // This is the ONLY mandatory field that you need to supply.
-    //      authority: 'https://login.microsoftonline.com/Enter_the_Tenant_Info_Here', // Defaults to "https://login.microsoftonline.com/common"
-    //      redirectUri: '/auth', // Points to window.location.origin by default. You must register this URI on Azure portal/App Registration.
-    //      postLogoutRedirectUri: '/', // Points to window.location.origin by default.
-    //      clientCapabilities: ['CP1'] // This lets the resource server know that this client can handle claim challenges.
-    //  },
-    auth: {
-      clientId: 'b80fffa9-1c1e-4edb-bc03-8254602dadcb',
-      redirectUri: 'http://localhost:4200',
-      authority: "https://login.microsoftonline.com/f19dc503-bcf3-4611-9678-391db76e919b",
-      postLogoutRedirectUri: "http://localhost:4200/public-page"
+     auth: {
+         clientId: 'Enter_the_Application_Id_Here', // This is the ONLY mandatory field that you need to supply.
+         authority: 'https://login.microsoftonline.com/Enter_the_Tenant_Info_Here', // Defaults to "https://login.microsoftonline.com/common"
+         redirectUri: '/auth', // Points to window.location.origin by default. You must register this URI on Azure portal/App Registration.
+         postLogoutRedirectUri: '/', // Points to window.location.origin by default.
+         clientCapabilities: ['CP1'] // This lets the resource server know that this client can handle claim challenges.
      },
-    // auth: {
-    //   clientId: '8764848e-c4e4-4481-93ba-189a1d352e0e',
-    //   redirectUri: 'http://localhost:4000',
-    //   authority: "https://login.microsoftonline.com/f19dc503-bcf3-4611-9678-391db76e919b",
-    //   postLogoutRedirectUri: "http://localhost:4000/public-page"
-    //  },
      cache: {
          cacheLocation: BrowserCacheLocation.LocalStorage, // Configures cache location. "sessionStorage" is more secure, but "localStorage" gives you SSO between tabs.
          storeAuthStateInCookie: isIE, // Set this to "true" if you are having issues on IE11 or Edge. Remove this line to use Angular Universal
