@@ -10,6 +10,18 @@ import { PublicPageComponent } from './public-page/public-page.component';
 import { RestrictedPageComponent } from './restricted-page/restricted-page.component';
 import { loginRequest, msalConfig } from './auth-config';
 
+// export function MSALInstanceFactory(): IPublicClientApplication {
+//   return new PublicClientApplication({
+//     auth: {
+//       clientId: 'b80fffa9-1c1e-4edb-bc03-8254602dadcb',
+//       redirectUri: 'http://localhost:4200',
+//       authority: "https://login.microsoftonline.com/f19dc503-bcf3-4611-9678-391db76e919b",
+//       // "Authority": "https://login.microsoftonline.com/{value of client id above}/tenadId",
+//       postLogoutRedirectUri: "http://localhost:4200/public-page"
+//     }
+//   });
+// }
+
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication(msalConfig);
 }
